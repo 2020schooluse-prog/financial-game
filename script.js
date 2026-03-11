@@ -64,6 +64,34 @@ const UI = {
     nextBtn: document.getElementById('next-step-btn')
 };
 
+// --- Global start function (called by button onclick) ---
+function handleStartGame() {
+    const cls = document.getElementById('student-class').value.trim();
+    const name = document.getElementById('student-name').value.trim();
+    const errDiv = document.getElementById('form-error');
+
+    if (!cls && !name) {
+        errDiv.textContent = '⚠️ 請填寫班級和姓名才能開始！';
+        errDiv.style.display = 'block';
+        return;
+    }
+    if (!cls) {
+        errDiv.textContent = '⚠️ 請填寫你的班級！';
+        errDiv.style.display = 'block';
+        return;
+    }
+    if (!name) {
+        errDiv.textContent = '⚠️ 請填寫你的姓名！';
+        errDiv.style.display = 'block';
+        return;
+    }
+
+    errDiv.style.display = 'none';
+    state.player.class = cls;
+    state.player.name = name;
+    switchScreen('goal');
+}
+
 // --- Initialization & Event Listeners ---
 document.addEventListener('DOMContentLoaded', () => {
     // Select Avatar
@@ -77,13 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Start Form Submit
-    document.getElementById('start-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        state.player.class = document.getElementById('student-class').value;
-        state.player.name = document.getElementById('student-name').value;
-        switchScreen('goal');
-    });
+
 
     // Goal Selection
     document.querySelectorAll('.goal-card').forEach(card => {
@@ -281,6 +303,9 @@ function applyAllowance(strategy, savedAmount) {
     // Generate events for the month (2 to 3)
     const numEvents = Math.floor(Math.random() * 2) + 2; // 2 or 3
     state.currentMonthData.eventQueue = generateEvents(numEvents);
+    
+    // Auto-trigger first event after short delay for visual feedback
+    setTimeout(() => triggerNextEvent(), 800);
 }
 
 // --- Events System ---
@@ -302,10 +327,12 @@ function generateEvents(count) {
 
 function triggerNextEvent() {
     if (!state.currentMonthData.eventQueue || state.currentMonthData.eventQueue.length === 0) {
-        // No more events, go to ledger
+        // No more events → automatically open the ledger
         state.currentStep = 'ledger';
         UI.actionPrompt.textContent = "月底到了，該來記帳囉！";
         UI.nextBtn.textContent = "打開記帳本 📝";
+        // Auto-open ledger after brief pause
+        setTimeout(() => initLedgerGame(), 600);
         return;
     }
 
@@ -335,7 +362,7 @@ function displayEvent(evt) {
         const btnPass = document.createElement('button');
         btnPass.className = 'btn btn-secondary';
         btnPass.textContent = '忍住不花錢';
-        btnPass.onclick = () => { hideModal('event'); checkMonthProgress(); };
+        btnPass.onclick = () => { hideModal('event'); setTimeout(() => triggerNextEvent(), 400); };
         
         btnContainer.appendChild(btnBuy);
         btnContainer.appendChild(btnPass);
@@ -353,7 +380,7 @@ function displayEvent(evt) {
         const btnPass = document.createElement('button');
         btnPass.className = 'btn btn-secondary';
         btnPass.textContent = '這次先不捐';
-        btnPass.onclick = () => { hideModal('event'); checkMonthProgress(); };
+        btnPass.onclick = () => { hideModal('event'); setTimeout(() => triggerNextEvent(), 400); };
 
         btnContainer.appendChild(btn50);
         btnContainer.appendChild(btn100);
@@ -384,17 +411,18 @@ function handleExpense(title, cost, type, correctType, isCharity = false) {
         
         if (isCharity) {
             flyHeart();
-            setTimeout(checkMonthProgress, 1600); // wait for anim
+            setTimeout(() => triggerNextEvent(), 1600); // wait for anim
             return;
         }
     }
     
-    checkMonthProgress();
+    // Auto-advance to next event
+    setTimeout(() => triggerNextEvent(), 400);
 }
 
 function checkMonthProgress() {
-    // Return to main dashboard to let user click Next (which will trigger next event or ledger)
-    // No direct loop to allow breathing room
+    // Kept for alert-dismiss path (overdraft warning)
+    setTimeout(() => triggerNextEvent(), 400);
 }
 
 // --- Ledger Mini-game ---

@@ -19,16 +19,16 @@
                 <form id="start-form">
                     <div class="input-group">
                         <label for="student-class">班級：</label>
-                        <input type="text" id="student-class" placeholder="例如：五年一班" required>
+                        <input type="text" id="student-class" placeholder="例如：五年一班">
                     </div>
                     <div class="input-group">
                         <label for="student-name">姓名：</label>
-                        <input type="text" id="student-name" placeholder="請輸入姓名" required>
+                        <input type="text" id="student-name" placeholder="請輸入姓名">
                     </div>
                     <div class="avatar-selection">
                         <label>選擇你的角色：</label>
                         <div class="avatars">
-                            <div class="avatar-card" data-gender="boy">
+                            <div class="avatar-card selected" data-gender="boy">
                                 <div class="avatar-emoji">👦</div>
                                 <p>小老闆 (男)</p>
                             </div>
@@ -38,7 +38,8 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn primary-btn btn-bounce">開始挑戰！</button>
+                    <div id="form-error" style="display:none; background:#ffe0e0; color:#c0392b; border-radius:10px; padding:12px; margin-bottom:15px; font-weight:bold; font-size:1.1rem; text-align:center;"></div>
+                    <button type="button" onclick="handleStartGame()" class="btn primary-btn btn-bounce">開始挑戰！</button>
                 </form>
             </div>
         </section>
