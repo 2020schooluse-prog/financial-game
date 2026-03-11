@@ -8,7 +8,7 @@ var state = {
     player: { class: '', name: '', gender: 'boy', avatarEmoji: '👦' },
     goal: { id: '', name: '', cost: 0, icon: '' },
     stats: { month: 1, wallet: 0, piggyBank: 0, hearts: 0 },
-    settings: { allowance: 600, maxMonths: 6, backendUrl: '' },
+    settings: { allowance: 600, maxMonths: 6, backendUrl: 'https://script.google.com/macros/s/AKfycbyi7HMY9IJITRsx91X5JvEl-8jufm9tMFu4phS26L_zKRJRKTv65cqG2G3sqPeTzUdK/exec' },
     history: [],
     currentMonthData: { strategy: '', savedAmount: 0, events: [], expenses: [], eventQueue: [] },
     currentStep: ''
