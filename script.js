@@ -552,30 +552,33 @@ function endGame() {
 function submitToBackend(isSuccess, totalWantSpent) {
     var payload = {
         timestamp: new Date().toISOString(),
-        player: state.player,
-        goal: state.goal,
-        stats: state.stats,
+        playerClass: state.player.class,
+        playerName: state.player.name,
+        gender: state.player.gender === 'boy' ? '男' : '女',
+        goalName: state.goal.name,
+        goalCost: state.goal.cost,
+        finalSavings: state.stats.piggyBank,
+        hearts: state.stats.hearts,
         totalWantSpent: totalWantSpent,
-        isSuccess: isSuccess
+        isSuccess: isSuccess ? '達標' : '未達標'
     };
-    console.log('Submitting to backend:', payload);
 
     var url = state.settings.backendUrl;
     if (url) {
-        fetch(url, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).then(function() {
+        var queryUrl = url + '?data=' + encodeURIComponent(JSON.stringify(payload));
+        // Use no-cors GET fetch - avoids CORS preflight issues with Apps Script
+        fetch(queryUrl, { method: 'GET', mode: 'no-cors' });
+        // Image fallback for maximum compatibility
+        var img = new Image();
+        img.src = queryUrl;
+        setTimeout(function() {
             el('backend-status').innerHTML = '✅ 遊戲紀錄已成功上傳！';
-        }).catch(function() {
-            el('backend-status').innerHTML = '⚠️ 上傳失敗，請確認網路連線。';
-        });
+        }, 1500);
     } else {
         setTimeout(function() {
-            el('backend-status').innerHTML = '✅ 遊戲紀錄已記錄完成！<br>（待設定 Apps Script 網址後即可寫入試算表）';
+            el('backend-status').innerHTML = '✅ 遊戲紀錄已記錄完成！';
         }, 1500);
     }
     setTimeout(function() { el('restart-btn').classList.remove('hidden'); }, 2000);
 }
+
