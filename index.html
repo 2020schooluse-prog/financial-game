@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>理財小達人：老街小老闆的六個月挑戰</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Start Screen -->
+        <section id="start-screen" class="screen active">
+            <div class="glass-panel">
+                <h1>💰 理財小達人 💰<br><span>老街小老闆的六個月挑戰</span></h1>
+                <p class="subtitle">歡迎來到老街！請輸入你的資料並選擇角色開始挑戰。</p>
+                <form id="start-form">
+                    <div class="input-group">
+                        <label for="student-class">班級：</label>
+                        <input type="text" id="student-class" placeholder="例如：五年一班" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="student-name">姓名：</label>
+                        <input type="text" id="student-name" placeholder="請輸入姓名" required>
+                    </div>
+                    <div class="avatar-selection">
+                        <label>選擇你的角色：</label>
+                        <div class="avatars">
+                            <div class="avatar-card" data-gender="boy">
+                                <div class="avatar-emoji">👦</div>
+                                <p>小老闆 (男)</p>
+                            </div>
+                            <div class="avatar-card" data-gender="girl">
+                                <div class="avatar-emoji">👧</div>
+                                <p>小老闆 (女)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn primary-btn btn-bounce">開始挑戰！</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Goal Screen -->
+        <section id="goal-screen" class="screen hidden">
+            <div class="glass-panel wide-panel">
+                <h2>🎯 選擇你的終極理財目標</h2>
+                <p>這六個月每個月會拿到 $600 零用錢，你想存錢買什麼呢？</p>
+                
+                <div class="goal-grid">
+                    <!-- Goal A -->
+                    <div class="goal-card" data-goal="a" data-cost="1800">
+                        <div class="goal-icon">🎮</div>
+                        <h3>目標 A: Switch 遊戲玩家</h3>
+                        <p class="cost">$1,800 元</p>
+                        <p class="desc">高難度進階：挑戰最高儲蓄力，買下全新的遊戲片！</p>
+                    </div>
+                    
+                    <!-- Goal B1 -->
+                    <div class="goal-card" data-goal="b1" data-cost="1000">
+                        <div class="goal-icon">📱</div>
+                        <h3>目標 B: 課金達人</h3>
+                        <p class="cost">$1,000 元</p>
+                        <p class="desc">中難度實用：購買手遊賽季通行證或商城幣。</p>
+                    </div>
+
+                    <!-- Goal B2 -->
+                    <div class="goal-card" data-goal="b2" data-cost="1200">
+                        <div class="goal-icon">🃏</div>
+                        <h3>目標 B: 盲盒/卡牌大師</h3>
+                        <p class="cost">$1,200 元</p>
+                        <p class="desc">中難度實用：購買寶可夢寶箱或泡泡瑪特盲盒。</p>
+                    </div>
+
+                    <!-- Goal C -->
+                    <div class="goal-card" data-goal="c" data-cost="900">
+                        <div class="goal-icon">🍿</div>
+                        <h3>目標 C: 娛樂大亨</h3>
+                        <p class="cost">$900 元</p>
+                        <p class="desc">中低難度體驗：請好朋友看4DX電影享受美食！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Dashboard Screen -->
+        <section id="game-screen" class="screen hidden">
+            <header class="game-header glass-panel">
+                <div class="profile-info">
+                    <span id="header-avatar" class="header-avatar">👦</span>
+                    <span id="header-name">小老闆</span>
+                </div>
+                <div class="month-display">
+                    <h2>第 <span id="current-month">1</span> / 6 個月</h2>
+                </div>
+                <div class="hearts-display">
+                    ❤️ <span id="heart-count">0</span>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="dashboard-left">
+                    <div class="wallet-card glass-panel">
+                        <h3>👛 錢包餘額</h3>
+                        <p class="amount">$<span id="wallet-balance">0</span></p>
+                    </div>
+                    <div class="piggy-card glass-panel">
+                        <h3>🐷 小豬撲滿</h3>
+                        <p class="amount">$<span id="piggy-balance">0</span></p>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="goal-progress"></div>
+                        </div>
+                        <p class="goal-text">距離目標 $<span id="target-amount">1800</span> 還差 $<span id="amount-left">1800</span></p>
+                    </div>
+                </div>
+                <div class="dashboard-right">
+                    <!-- Dynamic area for displaying current goal image and status -->
+                    <div class="goal-display glass-panel">
+                        <h3>🌟 我的目標</h3>
+                        <div id="current-goal-icon" class="large-icon">🎮</div>
+                        <p id="current-goal-name">Switch 遊戲玩家</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-dock glass-panel">
+                <p id="action-prompt">點擊按鈕進入這個月的挑戰！</p>
+                <button id="next-step-btn" class="btn primary-btn btn-bounce">開始這個月 ➡️</button>
+            </div>
+        </section>
+
+        <!-- Modals overlay -->
+        <div id="modal-container" class="modal-backdrop hidden">
+            
+            <!-- Strategy Modal -->
+            <div id="strategy-modal" class="modal glass-panel hidden">
+                <h2>💵 零用錢發放！</h2>
+                <p class="income-anim">+$600</p>
+                <p>這個月你獲得了 $600 元零用錢，請選擇你的儲蓄策略：</p>
+                
+                <div class="strategy-options">
+                    <div class="strategy-card" id="strategy-save-first">
+                        <h3>先存錢，再消費 (推薦)</h3>
+                        <p>把錢先鎖進小豬撲滿，剩下的才能花。</p>
+                        <div class="slider-container hidden" id="save-slider-container">
+                            <label for="save-amount">存入金額：$<span id="save-amount-display">200</span></label>
+                            <input type="range" id="save-amount" min="0" max="600" step="50" value="200">
+                            <button id="confirm-save-btn" class="btn success-btn">確認存入</button>
+                        </div>
+                    </div>
+                    <div class="strategy-card" id="strategy-spend-first">
+                        <h3>先消費，有餘額再存</h3>
+                        <p>全部放入錢包，月底剩下的才會存起來。</p>
+                        <button id="confirm-spend-btn" class="btn warning-btn">選擇此策略</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Modal -->
+            <div id="event-modal" class="modal glass-panel hidden">
+                <h2 id="event-title">🚨 突發事件</h2>
+                <p id="event-desc">描述文字</p>
+                <div id="event-actions" class="event-buttons">
+                    <!-- Buttons will be injected via JS -->
+                </div>
+            </div>
+
+            <!-- Ledger Modal -->
+            <div id="ledger-modal" class="modal glass-panel hidden">
+                <h2>📝 月底記帳本</h2>
+                <div class="ledger-summary">
+                    <p>本月收入: <span class="income">+$600</span></p>
+                    <p>本月支出: <span class="expense">-$<span id="month-expense">0</span></span></p>
+                    <p>本月存入: <span class="saving">+$<span id="month-saved">0</span></span></p>
+                </div>
+                <div class="categorize-game">
+                    <p>請將本月的花費分類：</p>
+                    <div id="expense-list" class="expense-list">
+                        <!-- Expenses injected here -->
+                    </div>
+                    <div class="drop-zones">
+                        <div class="drop-zone need-zone" data-type="need">必需品 (需要)</div>
+                        <div class="drop-zone want-zone" data-type="want">誘惑 (想要)</div>
+                    </div>
+                </div>
+                <button id="finish-month-btn" class="btn primary-btn hidden">結算本月 ➡️</button>
+            </div>
+            
+            <!-- Alert Modal (for warnings like overspending) -->
+            <div id="alert-modal" class="modal glass-panel hidden">
+                <h2>⚠️ 警告</h2>
+                <p id="alert-msg">透支！</p>
+                <button id="alert-ok-btn" class="btn primary-btn">知道了</button>
+            </div>
+        </div>
+
+        <!-- End Screen -->
+        <section id="end-screen" class="screen hidden">
+            <div class="glass-panel wide-panel text-center">
+                <h2>🎉 六個月挑戰結束！ 🎉</h2>
+                <div id="end-animation" class="end-anim">
+                    <div class="breaking-piggy">🐷🔨</div>
+                </div>
+                <h3 id="end-result-title">結算中...</h3>
+                <p id="end-result-desc"></p>
+                <p>共收集到 <span id="end-hearts">0</span> 顆愛心 ❤️</p>
+                <p>稱號: <span id="end-title" class="highlight">老街愛心小天使</span></p>
+                <div class="end-chart">
+                    <!-- Render final stats here -->
+                </div>
+                <p class="loading-msg" id="backend-status">正在上傳遊戲紀錄...</p>
+                <button id="restart-btn" class="btn primary-btn hidden">再玩一次</button>
+            </div>
+        </section>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
